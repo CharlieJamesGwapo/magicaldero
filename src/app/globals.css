@@ -6,10 +6,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -19,6 +21,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 input::-webkit-outer-spin-button,
@@ -31,6 +34,32 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
+/* Touch-friendly inputs and buttons */
+input,
+textarea,
+select,
+button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-size: 16px; /* Prevents zoom on iOS */
+  font-family: inherit;
+}
+
+button {
+  min-height: 44px; /* Touch-friendly minimum */
+  cursor: pointer;
+}
+
+input[type='date'],
+input[type='time'],
+input[type='number'],
+input[type='text'],
+textarea,
+select {
+  min-height: 44px; /* Touch-friendly minimum */
+}
+
 @layer utilities {
   .no-scrollbar {
     -ms-overflow-style: none;
@@ -39,5 +68,24 @@ input[type='number'] {
 
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Mobile-specific utilities */
+  @media (max-width: 640px) {
+    body {
+      font-size: 14px;
+    }
+
+    input,
+    textarea,
+    select {
+      font-size: 16px; /* Prevent zoom on input focus */
+    }
+  }
+
+  /* Responsive container */
+  .safe-area {
+    padding-left: max(env(safe-area-inset-left), 0.75rem);
+    padding-right: max(env(safe-area-inset-right), 0.75rem);
   }
 }

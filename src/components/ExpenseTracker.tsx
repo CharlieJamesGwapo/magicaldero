@@ -357,13 +357,13 @@ export default function ExpenseTracker() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-50 to-red-50 flex flex-col">
       {/* Header */}
-      <div className="bg-gradient-to-r from-red-700 via-red-600 to-red-800 text-white shadow-2xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-6 w-full md:w-auto">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-300 to-yellow-400 rounded-full blur-lg opacity-50"></div>
-                <div className="relative w-24 h-24 bg-white rounded-full p-2 flex-shrink-0 shadow-2xl ring-4 ring-yellow-300 hover:ring-yellow-200 transition-all duration-300 transform hover:scale-105">
+      <div className="bg-gradient-to-r from-red-700 via-red-600 to-red-800 text-white shadow-2xl sticky top-0 z-50 w-full">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
+          <div className="flex flex-row items-center justify-between gap-3 sm:gap-6">
+            <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
+              <div className="relative flex-shrink-0">
+                <div className="absolute inset-0 bg-gradient-to-br from-yellow-300 to-yellow-400 rounded-full blur-lg opacity-50 hidden sm:block"></div>
+                <div className="relative w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 bg-white rounded-full p-1 sm:p-2 flex-shrink-0 shadow-xl sm:shadow-2xl ring-2 sm:ring-4 ring-yellow-300 hover:ring-yellow-200 transition-all duration-300 transform hover:scale-105">
                   <img 
                     src="/cal.jpg" 
                     alt="Magicaldero Logo" 
@@ -371,34 +371,34 @@ export default function ExpenseTracker() {
                   />
                 </div>
               </div>
-              <div className="flex flex-col">
-                <h1 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-yellow-300 to-yellow-100 bg-clip-text text-transparent drop-shadow-lg">MAGICALDERO</h1>
-                <p className="text-red-100 text-sm md:text-base font-semibold tracking-wide">Premium Expense & Income Tracker</p>
-                <p className="text-red-100 text-xs md:text-sm opacity-90">Professional Business Finance Management</p>
+              <div className="flex flex-col min-w-0 flex-1">
+                <h1 className="text-xl sm:text-3xl md:text-5xl font-black bg-gradient-to-r from-yellow-300 to-yellow-100 bg-clip-text text-transparent drop-shadow-lg leading-tight truncate">MAGICALDERO</h1>
+                <p className="text-red-100 text-xs sm:text-sm md:text-base font-semibold tracking-wide hidden xs:block">Premium Tracker</p>
+                <p className="text-red-100 text-xs opacity-90 hidden sm:block">Professional Finance</p>
               </div>
             </div>
-            <div className="hidden lg:block">
+            <div className="hidden lg:flex flex-shrink-0">
               <div className="text-yellow-300 opacity-80 animate-bounce">
-                <TrendingUp size={56} strokeWidth={1.5} />
+                <TrendingUp size={48} strokeWidth={1.5} />
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto w-full px-4 py-8 flex-grow">
+      <div className="max-w-7xl mx-auto w-full px-2 sm:px-3 md:px-4 py-4 sm:py-6 md:py-8 flex-grow">
         {/* Input Form */}
-        <div className={`bg-white rounded-xl shadow-xl p-6 md:p-8 mb-8 border-2 transition-all ${editingId ? 'border-yellow-400 ring-2 ring-yellow-200' : 'border-red-100'}`}>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
+        <div className={`bg-white rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8 mb-4 sm:mb-6 md:mb-8 border-2 transition-all ${editingId ? 'border-yellow-400 ring-2 ring-yellow-200' : 'border-red-100'}`}>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3 sm:gap-4">
+            <h2 className="text-lg sm:text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
               {editingId ? (
                 <>
-                  <Edit2 size={28} className="text-yellow-500" />
+                  <Edit2 size={24} className="text-yellow-500 flex-shrink-0" />
                   Edit Record
                 </>
               ) : (
                 <>
-                  <Plus size={28} className="text-red-600" />
+                  <Plus size={24} className="text-red-600 flex-shrink-0" />
                   Add New Record
                 </>
               )}
@@ -406,52 +406,52 @@ export default function ExpenseTracker() {
             {editingId && (
               <button
                 onClick={handleCancelEdit}
-                className="text-gray-400 hover:text-red-600 transition p-2 rounded-lg hover:bg-red-50"
+                className="text-gray-400 hover:text-red-600 transition p-2 rounded-lg hover:bg-red-50 flex-shrink-0"
                 title="Cancel edit"
               >
-                <X size={24} />
+                <X size={20} />
               </button>
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Date <span className="text-red-600">*</span></label>
-              <input type="date" value={formData.date} onChange={(e) => handleInputChange('date', e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1 sm:mb-2">Date <span className="text-red-600">*</span></label>
+              <input type="date" value={formData.date} onChange={(e) => handleInputChange('date', e.target.value)} className="w-full px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Capital <span className="text-red-600">*</span></label>
-              <input type="number" value={formData.capital || ''} onChange={(e) => handleInputChange('capital', e.target.value)} placeholder="0.00" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1 sm:mb-2">Capital <span className="text-red-600">*</span></label>
+              <input type="number" value={formData.capital || ''} onChange={(e) => handleInputChange('capital', e.target.value)} placeholder="0.00" className="w-full px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Production <span className="text-red-600">*</span></label>
-              <input type="number" value={formData.production || ''} onChange={(e) => handleInputChange('production', e.target.value)} placeholder="0.00" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1 sm:mb-2">Production <span className="text-red-600">*</span></label>
+              <input type="number" value={formData.production || ''} onChange={(e) => handleInputChange('production', e.target.value)} placeholder="0.00" className="w-full px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Factory Expenses <span className="text-red-600">*</span></label>
-              <input type="number" value={formData.factoryExpenses || ''} onChange={(e) => handleInputChange('factoryExpenses', e.target.value)} placeholder="0.00" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1 sm:mb-2">Factory Exp <span className="text-red-600">*</span></label>
+              <input type="number" value={formData.factoryExpenses || ''} onChange={(e) => handleInputChange('factoryExpenses', e.target.value)} placeholder="0.00" className="w-full px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Personal Expenses <span className="text-red-600">*</span></label>
-              <input type="number" value={formData.personalExpenses || ''} onChange={(e) => handleInputChange('personalExpenses', e.target.value)} placeholder="0.00" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1 sm:mb-2">Personal Exp <span className="text-red-600">*</span></label>
+              <input type="number" value={formData.personalExpenses || ''} onChange={(e) => handleInputChange('personalExpenses', e.target.value)} placeholder="0.00" className="w-full px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Loans <span className="text-red-600">*</span></label>
-              <input type="number" value={formData.loans || ''} onChange={(e) => handleInputChange('loans', e.target.value)} placeholder="0.00" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1 sm:mb-2">Loans <span className="text-red-600">*</span></label>
+              <input type="number" value={formData.loans || ''} onChange={(e) => handleInputChange('loans', e.target.value)} placeholder="0.00" className="w-full px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Rejects <span className="text-red-600">*</span></label>
-              <input type="number" value={formData.rejects || ''} onChange={(e) => handleInputChange('rejects', e.target.value)} placeholder="0.00" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1 sm:mb-2">Rejects <span className="text-red-600">*</span></label>
+              <input type="number" value={formData.rejects || ''} onChange={(e) => handleInputChange('rejects', e.target.value)} placeholder="0.00" className="w-full px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-            <button onClick={handleAddRecord} className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-4 rounded-lg transition transform hover:scale-105 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
-              {editingId ? (<><Save size={20} />Update Record</>) : (<><Plus size={20} />Add Record</>)}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-4 sm:mt-6 md:mt-8">
+            <button onClick={handleAddRecord} className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 sm:py-4 rounded-lg transition transform hover:scale-105 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl text-sm sm:text-base">
+              {editingId ? (<><Save size={18} />Update</>) : (<><Plus size={18} />Add Record</>)}
             </button>
             {editingId && (
-              <button onClick={handleCancelEdit} className="w-full bg-gray-400 hover:bg-gray-500 text-white font-bold py-4 rounded-lg transition flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
-                <X size={20} />Cancel Edit
+              <button onClick={handleCancelEdit} className="w-full bg-gray-400 hover:bg-gray-500 text-white font-bold py-3 sm:py-4 rounded-lg transition flex items-center justify-center gap-2 shadow-lg hover:shadow-xl text-sm sm:text-base">
+                <X size={18} />Cancel
               </button>
             )}
           </div>
@@ -459,83 +459,83 @@ export default function ExpenseTracker() {
 
         {/* Stats Cards */}
         {records.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div className="bg-gradient-to-br from-blue-50 via-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-blue-600 text-sm font-bold uppercase tracking-wide">Total Capital</p>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">💰</span>
+          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
+            <div className="bg-gradient-to-br from-blue-50 via-blue-50 to-blue-100 border-2 border-blue-200 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg sm:shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
+              <div className="flex items-center justify-between mb-2 sm:mb-4">
+                <p className="text-blue-600 text-xs sm:text-sm font-bold uppercase tracking-wide">Total Capital</p>
+                <div className="w-8 sm:w-12 h-8 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span className="text-lg sm:text-2xl">💰</span>
                 </div>
               </div>
-              <p className="text-3xl md:text-4xl font-black text-blue-700">₱{totals.totalCapital.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
-              <p className="text-blue-500 text-xs mt-3 font-semibold">Starting Capital</p>
+              <p className="text-xl sm:text-3xl md:text-4xl font-black text-blue-700 truncate">₱{totals.totalCapital.toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+              <p className="text-blue-500 text-xs mt-1 sm:mt-3 font-semibold hidden sm:block">Starting Capital</p>
             </div>
 
-            <div className="bg-gradient-to-br from-green-50 via-green-50 to-green-100 border-2 border-green-200 rounded-xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-green-600 text-sm font-bold uppercase tracking-wide">Total Production</p>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">📈</span>
+            <div className="bg-gradient-to-br from-green-50 via-green-50 to-green-100 border-2 border-green-200 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg sm:shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
+              <div className="flex items-center justify-between mb-2 sm:mb-4">
+                <p className="text-green-600 text-xs sm:text-sm font-bold uppercase tracking-wide">Production</p>
+                <div className="w-8 sm:w-12 h-8 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span className="text-lg sm:text-2xl">📈</span>
                 </div>
               </div>
-              <p className="text-3xl md:text-4xl font-black text-green-700">₱{totals.totalProduction.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
-              <p className="text-green-500 text-xs mt-3 font-semibold">Gross Income</p>
+              <p className="text-xl sm:text-3xl md:text-4xl font-black text-green-700 truncate">₱{totals.totalProduction.toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+              <p className="text-green-500 text-xs mt-1 sm:mt-3 font-semibold hidden sm:block">Gross Income</p>
             </div>
 
-            <div className="bg-gradient-to-br from-red-50 via-red-50 to-red-100 border-2 border-red-200 rounded-xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-red-600 text-sm font-bold uppercase tracking-wide">Total Expenses</p>
-                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">💸</span>
+            <div className="bg-gradient-to-br from-red-50 via-red-50 to-red-100 border-2 border-red-200 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg sm:shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
+              <div className="flex items-center justify-between mb-2 sm:mb-4">
+                <p className="text-red-600 text-xs sm:text-sm font-bold uppercase tracking-wide">Expenses</p>
+                <div className="w-8 sm:w-12 h-8 sm:h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span className="text-lg sm:text-2xl">💸</span>
                 </div>
               </div>
-              <p className="text-3xl md:text-4xl font-black text-red-700">₱{(totals.totalFactoryExpenses + totals.totalPersonalExpenses + totals.totalLoans + totals.totalRejects).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
-              <p className="text-red-500 text-xs mt-3 font-semibold">All Deductions</p>
+              <p className="text-xl sm:text-3xl md:text-4xl font-black text-red-700 truncate">₱{(totals.totalFactoryExpenses + totals.totalPersonalExpenses + totals.totalLoans + totals.totalRejects).toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+              <p className="text-red-500 text-xs mt-1 sm:mt-3 font-semibold hidden sm:block">All Deductions</p>
             </div>
 
-            <div className="bg-gradient-to-br from-orange-50 via-yellow-50 to-orange-100 border-2 border-orange-300 rounded-xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-orange-600 text-sm font-bold uppercase tracking-wide">Capital Remaining</p>
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">🎯</span>
+            <div className="bg-gradient-to-br from-orange-50 via-yellow-50 to-orange-100 border-2 border-orange-300 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg sm:shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
+              <div className="flex items-center justify-between mb-2 sm:mb-4">
+                <p className="text-orange-600 text-xs sm:text-sm font-bold uppercase tracking-wide">Remaining</p>
+                <div className="w-8 sm:w-12 h-8 sm:h-12 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span className="text-lg sm:text-2xl">🎯</span>
                 </div>
               </div>
-              <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">₱{totals.totalCapitalRemaining.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
-              <p className="text-orange-500 text-xs mt-3 font-semibold">Actual Cash on Hand</p>
+              <p className="text-xl sm:text-3xl md:text-4xl font-black bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent truncate">₱{totals.totalCapitalRemaining.toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+              <p className="text-orange-500 text-xs mt-1 sm:mt-3 font-semibold hidden sm:block">Cash on Hand</p>
             </div>
           </div>
         )}
 
         {/* Charts Section */}
         {records.length > 0 && (
-          <div className="bg-white rounded-xl shadow-2xl p-6 md:p-8 mb-8 border border-red-100">
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
+          <div className="bg-white rounded-lg sm:rounded-xl shadow-lg sm:shadow-2xl p-3 sm:p-6 md:p-8 mb-4 sm:mb-6 md:mb-8 border border-red-100">
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 sm:gap-4 mb-4 sm:mb-8">
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-3">
-                  <div className="p-3 bg-gradient-to-br from-red-100 to-red-50 rounded-lg">
-                    <TrendingUp className="text-red-600" size={28} />
+                <h2 className="text-lg sm:text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
+                  <div className="p-2 sm:p-3 bg-gradient-to-br from-red-100 to-red-50 rounded-lg">
+                    <TrendingUp className="text-red-600" size={24} />
                   </div>
-                  Analytics & Insights
+                  Charts
                 </h2>
-                <p className="text-gray-500 text-sm md:text-base mt-2">Visual representation of your financial data</p>
+                <p className="text-gray-500 text-xs sm:text-sm mt-1">Visual financial data</p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                <select value={viewMode} onChange={(e) => setViewMode(e.target.value as 'daily' | 'monthly')} className="px-4 py-2 border-2 border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 hover:border-red-300 transition font-medium">
-                  <option value="daily">📅 Daily View</option>
-                  <option value="monthly">📆 Monthly View</option>
+              <div className="flex flex-col xs:flex-row gap-2 sm:gap-3 w-full lg:w-auto">
+                <select value={viewMode} onChange={(e) => setViewMode(e.target.value as 'daily' | 'monthly')} className="px-2 sm:px-4 py-2 text-xs sm:text-sm border-2 border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 hover:border-red-300 transition font-medium bg-white">
+                  <option value="daily">📅 Daily</option>
+                  <option value="monthly">📆 Monthly</option>
                 </select>
-                <select value={chartType} onChange={(e) => setChartType(e.target.value as 'line' | 'bar' | 'pie')} className="px-4 py-2 border-2 border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 hover:border-red-300 transition font-medium">
-                  <option value="line">📈 Line Chart</option>
-                  <option value="bar">📊 Bar Chart</option>
-                  <option value="pie">🥧 Pie Chart</option>
+                <select value={chartType} onChange={(e) => setChartType(e.target.value as 'line' | 'bar' | 'pie')} className="px-2 sm:px-4 py-2 text-xs sm:text-sm border-2 border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 hover:border-red-300 transition font-medium bg-white">
+                  <option value="line">📈 Line</option>
+                  <option value="bar">📊 Bar</option>
+                  <option value="pie">🥧 Pie</option>
                 </select>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-6 w-full h-96 md:h-[550px]">
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg sm:rounded-xl p-3 sm:p-6 w-full h-64 xs:h-80 sm:h-96 md:h-[550px] overflow-x-auto">
               {chartType === 'line' && (
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={summaryData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+                  <LineChart data={summaryData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
                     <defs>
                       <linearGradient id="colorProduction" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#22c55e" stopOpacity={0.8}/>
@@ -551,22 +551,22 @@ export default function ExpenseTracker() {
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="date" stroke="#9ca3af" />
-                    <YAxis stroke="#9ca3af" />
+                    <XAxis dataKey="date" stroke="#9ca3af" tick={{ fontSize: 10 }} />
+                    <YAxis stroke="#9ca3af" tick={{ fontSize: 10 }} width={40} />
                     <Tooltip 
                       formatter={(value) => `₱${(value as number).toLocaleString('en-PH')}`}
-                      contentStyle={{ backgroundColor: '#fff', border: '2px solid #dc2626', borderRadius: '8px' }}
+                      contentStyle={{ backgroundColor: '#fff', border: '2px solid #dc2626', borderRadius: '8px', fontSize: '12px' }}
                     />
-                    <Legend wrapperStyle={{ paddingTop: '20px' }} />
-                    <Line type="monotone" dataKey="production" stroke="#22c55e" strokeWidth={3} dot={{ fill: '#22c55e', r: 4 }} activeDot={{ r: 6 }} name="Production (Gross)" />
-                    <Line type="monotone" dataKey="totalExpenses" stroke="#ef4444" strokeWidth={3} dot={{ fill: '#ef4444', r: 4 }} activeDot={{ r: 6 }} name="Total Expenses" />
-                    <Line type="monotone" dataKey="netIncome" stroke="#3b82f6" strokeWidth={3} dot={{ fill: '#3b82f6', r: 4 }} activeDot={{ r: 6 }} name="Net Income" />
+                    <Legend wrapperStyle={{ paddingTop: '20px', fontSize: '12px' }} />
+                    <Line type="monotone" dataKey="production" stroke="#22c55e" strokeWidth={2} dot={{ fill: '#22c55e', r: 3 }} activeDot={{ r: 5 }} name="Production" />
+                    <Line type="monotone" dataKey="totalExpenses" stroke="#ef4444" strokeWidth={2} dot={{ fill: '#ef4444', r: 3 }} activeDot={{ r: 5 }} name="Expenses" />
+                    <Line type="monotone" dataKey="netIncome" stroke="#3b82f6" strokeWidth={2} dot={{ fill: '#3b82f6', r: 3 }} activeDot={{ r: 5 }} name="Net Income" />
                   </LineChart>
                 </ResponsiveContainer>
               )}
               {chartType === 'bar' && (
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={summaryData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+                  <BarChart data={summaryData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
                     <defs>
                       <linearGradient id="barProduction" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor="#22c55e"/>
@@ -582,16 +582,16 @@ export default function ExpenseTracker() {
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="date" stroke="#9ca3af" />
-                    <YAxis stroke="#9ca3af" />
+                    <XAxis dataKey="date" stroke="#9ca3af" tick={{ fontSize: 10 }} />
+                    <YAxis stroke="#9ca3af" tick={{ fontSize: 10 }} width={40} />
                     <Tooltip 
                       formatter={(value) => `₱${(value as number).toLocaleString('en-PH')}`}
-                      contentStyle={{ backgroundColor: '#fff', border: '2px solid #dc2626', borderRadius: '8px' }}
+                      contentStyle={{ backgroundColor: '#fff', border: '2px solid #dc2626', borderRadius: '8px', fontSize: '12px' }}
                     />
-                    <Legend wrapperStyle={{ paddingTop: '20px' }} />
-                    <Bar dataKey="production" fill="url(#barProduction)" name="Production (Gross)" radius={[8, 8, 0, 0]} />
-                    <Bar dataKey="totalExpenses" fill="url(#barExpenses)" name="Total Expenses" radius={[8, 8, 0, 0]} />
-                    <Bar dataKey="netIncome" fill="url(#barIncome)" name="Net Income" radius={[8, 8, 0, 0]} />
+                    <Legend wrapperStyle={{ paddingTop: '20px', fontSize: '12px' }} />
+                    <Bar dataKey="production" fill="url(#barProduction)" name="Production" radius={[6, 6, 0, 0]} />
+                    <Bar dataKey="totalExpenses" fill="url(#barExpenses)" name="Expenses" radius={[6, 6, 0, 0]} />
+                    <Bar dataKey="netIncome" fill="url(#barIncome)" name="Net Income" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               )}
@@ -602,10 +602,10 @@ export default function ExpenseTracker() {
                       data={expenseBreakdown.filter(item => item.value > 0)} 
                       cx="50%" 
                       cy="50%" 
-                      labelLine={true} 
+                      labelLine={false} 
                       label={({ name, value }) => `${name}: ₱${(value as number).toLocaleString('en-PH')}`} 
-                      outerRadius={140}
-                      innerRadius={60}
+                      outerRadius={80}
+                      innerRadius={40}
                       fill="#8884d8" 
                       dataKey="value"
                       animationBegin={0}
@@ -623,51 +623,51 @@ export default function ExpenseTracker() {
 
         {/* Data Table */}
         {records.length > 0 && (
-          <div className="bg-white rounded-xl shadow-xl p-6 md:p-8 border border-red-100">
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-800">📋 Detailed Records</h2>
-              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                <button onClick={downloadCSV} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition hover:shadow-lg">
-                  <Download size={18} />CSV
+          <div className="bg-white rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl p-3 sm:p-4 md:p-8 border border-red-100 mb-4 sm:mb-6 md:mb-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3 sm:gap-4">
+              <h2 className="text-lg sm:text-2xl md:text-3xl font-bold text-gray-800">📋 Records</h2>
+              <div className="flex flex-col xs:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+                <button onClick={downloadCSV} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 sm:px-4 rounded-lg flex items-center justify-center gap-1 sm:gap-2 transition hover:shadow-lg text-xs sm:text-sm">
+                  <Download size={16} />CSV
                 </button>
-                <button onClick={downloadExcel} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition hover:shadow-lg">
-                  <FileText size={18} />Excel
+                <button onClick={downloadExcel} className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-3 sm:px-4 rounded-lg flex items-center justify-center gap-1 sm:gap-2 transition hover:shadow-lg text-xs sm:text-sm">
+                  <FileText size={16} />Excel
                 </button>
               </div>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs md:text-sm">
-                <thead className="bg-gradient-to-r from-red-50 to-red-100 border-b-2 border-red-200 sticky top-0">
+            <div className="overflow-x-auto -mx-3 sm:-mx-4 md:-mx-8 touch-pan-x">
+              <table className="w-full text-xs sm:text-sm border-collapse">
+                <thead className="bg-gradient-to-r from-red-50 to-red-100 border-b-2 border-red-200 sticky top-0 z-10">
                   <tr>
-                    <th className="px-4 py-3 text-left font-semibold text-gray-700">Date</th>
-                    <th className="px-4 py-3 text-right font-semibold text-gray-700">Capital</th>
-                    <th className="px-4 py-3 text-right font-semibold text-gray-700">Production</th>
-                    <th className="px-4 py-3 text-right font-semibold text-gray-700">Factory Exp</th>
-                    <th className="px-4 py-3 text-right font-semibold text-gray-700">Personal Exp</th>
-                    <th className="px-4 py-3 text-right font-semibold text-gray-700">Loans</th>
-                    <th className="px-4 py-3 text-right font-semibold text-gray-700">Rejects</th>
-                    <th className="px-4 py-3 text-right font-semibold text-green-600">Net Income</th>
-                    <th className="px-4 py-3 text-right font-semibold text-orange-600">Capital Remaining</th>
-                    <th className="px-4 py-3 text-center font-semibold text-gray-700">Actions</th>
+                    <th className="px-2 sm:px-4 py-3 sm:py-4 text-left font-bold text-gray-800 sticky left-0 bg-gradient-to-r from-red-50 to-red-100 z-20 text-xs sm:text-sm">Date</th>
+                    <th className="px-2 sm:px-4 py-3 sm:py-4 text-right font-semibold text-blue-600 hidden xs:table-cell text-xs">Cap</th>
+                    <th className="px-2 sm:px-4 py-3 sm:py-4 text-right font-semibold text-green-600 text-xs sm:text-sm">Prod</th>
+                    <th className="px-2 sm:px-4 py-3 sm:py-4 text-right font-semibold text-red-600 hidden sm:table-cell text-xs">Factory</th>
+                    <th className="px-2 sm:px-4 py-3 sm:py-4 text-right font-semibold text-red-600 hidden md:table-cell text-xs">Personal</th>
+                    <th className="px-2 sm:px-4 py-3 sm:py-4 text-right font-semibold text-purple-600 hidden lg:table-cell text-xs">Loans</th>
+                    <th className="px-2 sm:px-4 py-3 sm:py-4 text-right font-semibold text-indigo-600 hidden lg:table-cell text-xs">Rejects</th>
+                    <th className="px-2 sm:px-4 py-3 sm:py-4 text-right font-semibold text-green-600 text-xs sm:text-sm">Net</th>
+                    <th className="px-2 sm:px-4 py-3 sm:py-4 text-right font-semibold text-orange-600 text-xs sm:text-sm">Remaining</th>
+                    <th className="px-2 sm:px-4 py-3 sm:py-4 text-center font-semibold text-gray-700 sticky right-0 bg-gradient-to-l from-red-50 to-red-100 z-20 text-xs">Act</th>
                   </tr>
                 </thead>
                 <tbody>
                   {records.map((record, index) => (
-                    <tr key={record.id} className={`${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-red-50 transition border-b border-gray-200`}>
-                      <td className="px-4 py-3 text-gray-800 font-medium">{record.date}</td>
-                      <td className="px-4 py-3 text-right text-gray-800">₱{record.capital.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
-                      <td className="px-4 py-3 text-right text-gray-800">₱{record.production.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
-                      <td className="px-4 py-3 text-right text-gray-800">₱{record.factoryExpenses.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
-                      <td className="px-4 py-3 text-right text-gray-800">₱{record.personalExpenses.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
-                      <td className="px-4 py-3 text-right text-gray-800">₱{record.loans.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
-                      <td className="px-4 py-3 text-right text-gray-800">₱{record.rejects.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
-                      <td className="px-4 py-3 text-right text-green-600 font-bold">₱{record.netIncome.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
-                      <td className="px-4 py-3 text-right text-orange-600 font-bold">₱{record.totalCapitalRemaining.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
-                      <td className="px-4 py-3 text-center">
-                        <div className="flex justify-center gap-2">
-                          <button onClick={() => handleEditRecord(record)} className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition hover:shadow-lg" title="Edit"><Edit2 size={16} /></button>
-                          <button onClick={() => setDeleteConfirm(record.id)} className="bg-red-500 hover:bg-red-600 text-white p-2 rounded transition hover:shadow-lg" title="Delete"><Trash2 size={16} /></button>
+                    <tr key={record.id} className={`${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-red-50/80 transition-colors duration-150 border-b border-gray-200/50`}>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-800 font-medium text-xs sm:text-sm sticky left-0 bg-inherit">{record.date}</td>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-right text-gray-800 hidden xs:table-cell text-xs font-medium">₱{record.capital.toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-right text-gray-800 font-semibold text-xs">₱{record.production.toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-right text-gray-800 hidden sm:table-cell text-xs">₱{record.factoryExpenses.toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-right text-gray-800 hidden md:table-cell text-xs">₱{record.personalExpenses.toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-right text-gray-800 hidden lg:table-cell text-xs">₱{record.loans.toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-right text-gray-800 hidden lg:table-cell text-xs">₱{record.rejects.toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-right text-green-600 font-bold text-xs">₱{record.netIncome.toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                      <td className="px-2 sm:px-4 py-2 sm:py-3 text-right text-orange-600 font-bold text-xs">₱{record.totalCapitalRemaining.toLocaleString('en-PH', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                      <td className="px-1 sm:px-4 py-2 sm:py-3 text-center sticky right-0 bg-inherit">
+                        <div className="flex justify-center gap-1 sm:gap-2 flex-wrap">
+                          <button onClick={() => handleEditRecord(record)} className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition hover:shadow-lg active:scale-95 flex-shrink-0 min-w-[44px] h-[44px] flex items-center justify-center" title="Edit"><Edit2 size={16} /></button>
+                          <button onClick={() => setDeleteConfirm(record.id)} className="bg-red-500 hover:bg-red-600 text-white p-2 rounded transition hover:shadow-lg active:scale-95 flex-shrink-0 min-w-[44px] h-[44px] flex items-center justify-center" title="Delete"><Trash2 size={16} /></button>
                         </div>
                       </td>
                     </tr>
@@ -680,24 +680,24 @@ export default function ExpenseTracker() {
 
         {/* Empty State */}
         {records.length === 0 && (
-          <div className="bg-white rounded-xl shadow-xl p-12 text-center border border-red-100">
-            <TrendingUp size={64} className="mx-auto text-gray-300 mb-4" />
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-400 mb-2">No Records Yet</h3>
-            <p className="text-gray-400 text-lg">Add your first expense record to get started tracking your finances!</p>
+          <div className="bg-white rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl p-6 sm:p-8 md:p-12 text-center border border-red-100">
+            <TrendingUp size={56} className="mx-auto text-gray-300 mb-4" />
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-400 mb-2">No Records Yet</h3>
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg">Add your first record to get started!</p>
           </div>
         )}
 
         {/* Formula Reference */}
-        <div className="bg-red-50 border-l-4 border-red-600 rounded-lg p-6 md:p-8 mt-8 mb-8 shadow-lg">
-          <h3 className="text-lg md:text-xl font-bold text-red-900 mb-4">📐 Formula Reference</h3>
-          <div className="grid md:grid-cols-2 gap-6">
+        <div className="bg-red-50 border-l-4 border-red-600 rounded-lg p-4 sm:p-6 md:p-8 mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 md:mb-8 shadow-lg">
+          <h3 className="text-base sm:text-lg md:text-xl font-bold text-red-900 mb-4">📐 Formulas</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
             <div>
-              <p className="font-semibold text-red-900 mb-2">Net Income Formula:</p>
-              <code className="bg-white px-4 py-3 rounded border border-red-200 block text-sm font-mono text-gray-800 break-words">Production - (Factory Exp + Personal Exp + Loans + Rejects)</code>
+              <p className="font-semibold text-red-900 mb-2 text-xs sm:text-sm">Net Income:</p>
+              <code className="bg-white px-2 sm:px-4 py-2 sm:py-3 rounded border border-red-200 block text-xs font-mono text-gray-800 break-words">Production - Expenses</code>
             </div>
             <div>
-              <p className="font-semibold text-red-900 mb-2">Capital Remaining Formula:</p>
-              <code className="bg-white px-4 py-3 rounded border border-red-200 block text-sm font-mono text-gray-800 break-words">Capital + Production - Expenses</code>
+              <p className="font-semibold text-red-900 mb-2 text-xs sm:text-sm">Capital Remaining:</p>
+              <code className="bg-white px-2 sm:px-4 py-2 sm:py-3 rounded border border-red-200 block text-xs font-mono text-gray-800 break-words">Capital + Production - Expenses</code>
             </div>
           </div>
         </div>
@@ -718,60 +718,60 @@ export default function ExpenseTracker() {
       )}
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-red-800 via-red-700 to-red-900 text-white mt-16 border-t-4 border-yellow-400">
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12">
+      <footer className="bg-gradient-to-r from-red-800 via-red-700 to-red-900 text-white mt-8 sm:mt-12 md:mt-16 border-t-4 border-yellow-400">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8 sm:py-12 md:py-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-12 mb-8 md:mb-12">
             {/* Brand Section */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-16 h-16 bg-white rounded-lg p-2 shadow-lg">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-12 sm:w-16 h-12 sm:h-16 bg-white rounded-lg p-1 sm:p-2 shadow-lg flex-shrink-0">
                   <img src="/cal.jpg" alt="Logo" className="w-full h-full object-contain rounded" />
                 </div>
-                <div>
-                  <h3 className="text-2xl font-black text-yellow-300">MAGICALDERO</h3>
-                  <p className="text-red-100 text-sm">Professional Finance Tracking</p>
+                <div className="min-w-0">
+                  <h3 className="text-lg sm:text-2xl font-black text-yellow-300 truncate">MAGICALDERO</h3>
+                  <p className="text-red-100 text-xs sm:text-sm truncate">Finance Tracking</p>
                 </div>
               </div>
-              <p className="text-red-100 leading-relaxed">Empowering businesses with accurate, automated financial management and real-time insights.</p>
+              <p className="text-red-100 text-xs sm:text-sm leading-relaxed">Automated financial management solutions.</p>
             </div>
 
             {/* Owner Info */}
-            <div className="space-y-4">
-              <h4 className="text-xl font-bold text-yellow-300 flex items-center gap-2">
-                <div className="w-1 h-6 bg-yellow-400 rounded-full"></div>
-                Owner & CEO
+            <div className="space-y-3 sm:space-y-4">
+              <h4 className="text-base sm:text-lg md:text-xl font-bold text-yellow-300 flex items-center gap-2">
+                <div className="w-1 h-5 sm:h-6 bg-yellow-400 rounded-full flex-shrink-0"></div>
+                Owner
               </h4>
-              <div className="space-y-3 text-red-50">
-                <div className="flex items-center gap-3 hover:text-yellow-300 transition">
-                  <span className="text-xl">👤</span>
-                  <div>
-                    <p className="font-semibold">Bill John Buenaflor</p>
-                    <p className="text-xs text-red-200">MAGICALDERO Founder</p>
+              <div className="space-y-2 sm:space-y-3 text-red-50 text-xs sm:text-sm">
+                <div className="flex items-center gap-2 hover:text-yellow-300 transition">
+                  <span className="text-lg flex-shrink-0">👤</span>
+                  <div className="min-w-0">
+                    <p className="font-semibold truncate">Bill John Buenaflor</p>
+                    <p className="text-xs text-red-200">Founder</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 hover:text-yellow-300 transition">
-                  <span className="text-xl">📧</span>
-                  <a href="mailto:Magicaldero888@gmail.com" className="hover:underline">Magicaldero888@gmail.com</a>
+                <div className="flex items-center gap-2 hover:text-yellow-300 transition break-all">
+                  <span className="text-lg flex-shrink-0">📧</span>
+                  <a href="mailto:Magicaldero888@gmail.com" className="hover:underline text-xs sm:text-sm break-all">Magicaldero888@gmail.com</a>
                 </div>
               </div>
             </div>
 
             {/* Contact Info */}
-            <div className="space-y-4">
-              <h4 className="text-xl font-bold text-yellow-300 flex items-center gap-2">
-                <div className="w-1 h-6 bg-yellow-400 rounded-full"></div>
-                Contact Info
+            <div className="space-y-3 sm:space-y-4">
+              <h4 className="text-base sm:text-lg md:text-xl font-bold text-yellow-300 flex items-center gap-2">
+                <div className="w-1 h-5 sm:h-6 bg-yellow-400 rounded-full flex-shrink-0"></div>
+                Contact
               </h4>
-              <div className="space-y-3 text-red-50">
-                <div className="flex items-start gap-3 hover:text-yellow-300 transition">
-                  <span className="text-xl">📍</span>
-                  <p className="text-sm">Purok 5 brgy. Tawan-Tawan Mlang, North Cotabato, Philippines</p>
+              <div className="space-y-2 sm:space-y-3 text-red-50 text-xs sm:text-sm">
+                <div className="flex items-start gap-2 hover:text-yellow-300 transition">
+                  <span className="text-lg flex-shrink-0">📍</span>
+                  <p className="text-xs sm:text-sm">Purok 5, Tawan-Tawan, North Cotabato</p>
                 </div>
-                <div className="flex items-center gap-3 hover:text-yellow-300 transition">
-                  <span className="text-xl">📱</span>
+                <div className="flex items-center gap-2 hover:text-yellow-300 transition">
+                  <span className="text-lg flex-shrink-0">📱</span>
                   <div className="flex flex-col gap-1">
-                    <a href="tel:09228922458" className="hover:underline">0922-892-2458</a>
-                    <a href="tel:09209318456" className="hover:underline">0920-931-8456</a>
+                    <a href="tel:09228922458" className="hover:underline text-xs">0922-892-2458</a>
+                    <a href="tel:09209318456" className="hover:underline text-xs">0920-931-8456</a>
                   </div>
                 </div>
               </div>
@@ -779,19 +779,19 @@ export default function ExpenseTracker() {
           </div>
 
           {/* Divider */}
-          <div className="border-t border-red-600/50 my-8"></div>
+          <div className="border-t border-red-600/50 my-6 sm:my-8 md:my-8"></div>
 
           {/* Bottom Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 items-center text-xs sm:text-sm">
             <div>
-              <p className="text-yellow-300 font-semibold mb-2">Quality • Trust • Excellence</p>
-              <p className="text-red-100 text-sm">© 2024 MAGICALDERO | Quality Products & Professional Service</p>
-              <p className="text-red-100/70 text-xs mt-1">Automated Expense & Income Tracking | Accurate Calculations</p>
+              <p className="text-yellow-300 font-semibold mb-1 sm:mb-2">Quality • Trust • Excellence</p>
+              <p className="text-red-100">© 2024 MAGICALDERO</p>
+              <p className="text-red-100/70 text-xs">Automated Finance Tracking</p>
             </div>
-            <div className="flex justify-center md:justify-end">
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-red-400/20 hover:border-red-400/50 transition">
-                <p className="text-yellow-300 font-bold text-lg">⭐ Premium Service Provider</p>
-                <p className="text-red-100 text-xs mt-1">Trusted by Business Owners & Entrepreneurs</p>
+            <div className="flex justify-center sm:justify-end">
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 border border-red-400/20 hover:border-red-400/50 transition text-center sm:text-right">
+                <p className="text-yellow-300 font-bold text-xs sm:text-sm">⭐ Premium Service</p>
+                <p className="text-red-100 text-xs mt-1">Trusted Provider</p>
               </div>
             </div>
           </div>
