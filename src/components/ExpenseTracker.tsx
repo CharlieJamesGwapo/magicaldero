@@ -28,7 +28,6 @@ interface ExpenseRecord {
   loans: number;
   rejects: number;
   production: number;
-  grossIncome: number;
   netIncome: number;
   totalCapitalRemaining: number;
 }
@@ -47,21 +46,20 @@ export default function ExpenseTracker() {
     loans: 0,
     rejects: 0,
     production: 0,
-    grossIncome: 0,
   });
 
   const calculateNetIncome = (
-    grossIncome: number,
+    production: number,
     factoryExpenses: number,
     personalExpenses: number,
     loans: number,
     rejects: number
   ) => {
-    return grossIncome - (factoryExpenses + personalExpenses + loans + rejects);
+    return production - (factoryExpenses + personalExpenses + loans + rejects);
   };
 
-  const calculateTotalCapitalRemaining = (capital: number, netIncome: number) => {
-    return capital + netIncome;
+  const calculateTotalCapitalRemaining = (capital: number, production: number, totalExpenses: number) => {
+    return capital + production - totalExpenses;
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -72,8 +70,10 @@ export default function ExpenseTracker() {
   };
 
   const handleAddRecord = () => {
+    const totalExpenses = formData.factoryExpenses + formData.personalExpenses + formData.loans + formData.rejects;
+    
     const netIncome = calculateNetIncome(
-      formData.grossIncome,
+      formData.production,
       formData.factoryExpenses,
       formData.personalExpenses,
       formData.loans,
@@ -82,7 +82,8 @@ export default function ExpenseTracker() {
 
     const totalCapitalRemaining = calculateTotalCapitalRemaining(
       formData.capital,
-      netIncome
+      formData.production,
+      totalExpenses
     );
 
     if (editingId) {
@@ -118,7 +119,6 @@ export default function ExpenseTracker() {
       loans: 0,
       rejects: 0,
       production: 0,
-      grossIncome: 0,
     });
   };
 
@@ -131,7 +131,6 @@ export default function ExpenseTracker() {
       loans: record.loans,
       rejects: record.rejects,
       production: record.production,
-      grossIncome: record.grossIncome,
     });
     setEditingId(record.id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -147,7 +146,6 @@ export default function ExpenseTracker() {
       loans: 0,
       rejects: 0,
       production: 0,
-      grossIncome: 0,
     });
   };
 
@@ -157,7 +155,7 @@ export default function ExpenseTracker() {
   };
 
   const downloadCSV = () => {
-    const headers = ['Date', 'Capital', 'Factory Expenses', 'Personal Expenses', 'Loans', 'Rejects', 'Production', 'Gross Income', 'Net Income', 'Total Capital Remaining'];
+    const headers = ['Date', 'Capital', 'Factory Expenses', 'Personal Expenses', 'Loans', 'Rejects', 'Production', 'Net Income', 'Total Capital Remaining'];
     const rows = records.map(r => [
       r.date,
       r.capital,
@@ -166,7 +164,6 @@ export default function ExpenseTracker() {
       r.loans,
       r.rejects,
       r.production,
-      r.grossIncome,
       r.netIncome,
       r.totalCapitalRemaining,
     ]);
@@ -215,7 +212,6 @@ export default function ExpenseTracker() {
               <th>Loans</th>
               <th>Rejects</th>
               <th>Production</th>
-              <th>Gross Income</th>
               <th>Net Income</th>
               <th>Capital Remaining</th>
             </tr>
@@ -227,8 +223,7 @@ export default function ExpenseTracker() {
                 <td>₱${r.personalExpenses.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
                 <td>₱${r.loans.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
                 <td>₱${r.rejects.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
-                <td>${r.production.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
-                <td>₱${r.grossIncome.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
+                <td>₱${r.production.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
                 <td style="color: green; font-weight: bold;">₱${r.netIncome.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
                 <td style="color: #C41E3A; font-weight: bold;">₱${r.totalCapitalRemaining.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
               </tr>
@@ -242,8 +237,8 @@ export default function ExpenseTracker() {
               <td><strong>₱${totals.totalCapital.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</strong></td>
             </tr>
             <tr class="total">
-              <td><strong>Total Gross Income</strong></td>
-              <td><strong>₱${totals.totalGrossIncome.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</strong></td>
+              <td><strong>Total Production (Gross)</strong></td>
+              <td><strong>₱${totals.totalProduction.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</strong></td>
             </tr>
             <tr class="total">
               <td><strong>Total Expenses</strong></td>
@@ -280,7 +275,7 @@ export default function ExpenseTracker() {
         if (existing) {
           existing.netIncome += record.netIncome;
           existing.totalCapitalRemaining = record.totalCapitalRemaining;
-          existing.grossIncome += record.grossIncome;
+          existing.production += record.production;
           existing.totalExpenses =
             (existing.totalExpenses || 0) +
             record.factoryExpenses +
@@ -292,7 +287,7 @@ export default function ExpenseTracker() {
             date: record.date,
             netIncome: record.netIncome,
             totalCapitalRemaining: record.totalCapitalRemaining,
-            grossIncome: record.grossIncome,
+            production: record.production,
             totalExpenses:
               record.factoryExpenses +
               record.personalExpenses +
@@ -310,7 +305,7 @@ export default function ExpenseTracker() {
         if (existing) {
           existing.netIncome += record.netIncome;
           existing.totalCapitalRemaining = record.totalCapitalRemaining;
-          existing.grossIncome += record.grossIncome;
+          existing.production += record.production;
           existing.totalExpenses =
             (existing.totalExpenses || 0) +
             record.factoryExpenses +
@@ -323,7 +318,7 @@ export default function ExpenseTracker() {
             date: monthKey,
             netIncome: record.netIncome,
             totalCapitalRemaining: record.totalCapitalRemaining,
-            grossIncome: record.grossIncome,
+            production: record.production,
             totalExpenses:
               record.factoryExpenses +
               record.personalExpenses +
@@ -345,7 +340,6 @@ export default function ExpenseTracker() {
       totalLoans: records.reduce((sum, r) => sum + r.loans, 0),
       totalRejects: records.reduce((sum, r) => sum + r.rejects, 0),
       totalProduction: records.reduce((sum, r) => sum + r.production, 0),
-      totalGrossIncome: records.reduce((sum, r) => sum + r.grossIncome, 0),
       totalNetIncome: records.reduce((sum, r) => sum + r.netIncome, 0),
       totalCapitalRemaining: records.length > 0 ? records[records.length - 1].totalCapitalRemaining : 0,
     };
@@ -363,24 +357,31 @@ export default function ExpenseTracker() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-50 to-red-50 flex flex-col">
       {/* Header */}
-      <div className="bg-gradient-to-r from-red-700 via-red-600 to-red-800 text-white shadow-xl sticky top-0 z-50">
+      <div className="bg-gradient-to-r from-red-700 via-red-600 to-red-800 text-white shadow-2xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-6 w-full md:w-auto">
-              <div className="w-20 h-20 bg-white rounded-full p-2 flex-shrink-0 shadow-lg ring-2 ring-yellow-400">
-                <img 
-                  src="/cal.jpg" 
-                  alt="Magicaldero Logo" 
-                  className="w-full h-full object-contain rounded-full"
-                />
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-yellow-300 to-yellow-400 rounded-full blur-lg opacity-50"></div>
+                <div className="relative w-24 h-24 bg-white rounded-full p-2 flex-shrink-0 shadow-2xl ring-4 ring-yellow-300 hover:ring-yellow-200 transition-all duration-300 transform hover:scale-105">
+                  <img 
+                    src="/cal.jpg" 
+                    alt="Magicaldero Logo" 
+                    className="w-full h-full object-contain rounded-full"
+                  />
+                </div>
               </div>
-              <div>
-                <h1 className="text-3xl md:text-4xl font-bold">MAGICALDERO</h1>
-                <p className="text-red-100 text-sm md:text-base">Expense & Income Tracker</p>
-                <p className="text-red-100 text-xs md:text-sm">Manage your business finances automatically</p>
+              <div className="flex flex-col">
+                <h1 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-yellow-300 to-yellow-100 bg-clip-text text-transparent drop-shadow-lg">MAGICALDERO</h1>
+                <p className="text-red-100 text-sm md:text-base font-semibold tracking-wide">Premium Expense & Income Tracker</p>
+                <p className="text-red-100 text-xs md:text-sm opacity-90">Professional Business Finance Management</p>
               </div>
             </div>
-            <TrendingUp size={48} className="opacity-80 hidden lg:block flex-shrink-0" />
+            <div className="hidden lg:block">
+              <div className="text-yellow-300 opacity-80 animate-bounce">
+                <TrendingUp size={56} strokeWidth={1.5} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -413,7 +414,7 @@ export default function ExpenseTracker() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Date <span className="text-red-600">*</span></label>
               <input type="date" value={formData.date} onChange={(e) => handleInputChange('date', e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
@@ -421,6 +422,10 @@ export default function ExpenseTracker() {
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Capital <span className="text-red-600">*</span></label>
               <input type="number" value={formData.capital || ''} onChange={(e) => handleInputChange('capital', e.target.value)} placeholder="0.00" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Production <span className="text-red-600">*</span></label>
+              <input type="number" value={formData.production || ''} onChange={(e) => handleInputChange('production', e.target.value)} placeholder="0.00" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Factory Expenses <span className="text-red-600">*</span></label>
@@ -438,14 +443,6 @@ export default function ExpenseTracker() {
               <label className="block text-sm font-semibold text-gray-700 mb-2">Rejects <span className="text-red-600">*</span></label>
               <input type="number" value={formData.rejects || ''} onChange={(e) => handleInputChange('rejects', e.target.value)} placeholder="0.00" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
             </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Production <span className="text-red-600">*</span></label>
-              <input type="number" value={formData.production || ''} onChange={(e) => handleInputChange('production', e.target.value)} placeholder="0.00" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Gross Income <span className="text-red-600">*</span></label>
-              <input type="number" value={formData.grossIncome || ''} onChange={(e) => handleInputChange('grossIncome', e.target.value)} placeholder="0.00" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition hover:border-red-300" />
-            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
@@ -462,41 +459,72 @@ export default function ExpenseTracker() {
 
         {/* Stats Cards */}
         {records.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-4 shadow-lg hover:shadow-xl transition">
-              <p className="text-gray-600 text-sm font-semibold">Total Capital</p>
-              <p className="text-2xl md:text-3xl font-bold text-blue-700">₱{totals.totalCapital.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div className="bg-gradient-to-br from-blue-50 via-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-blue-600 text-sm font-bold uppercase tracking-wide">Total Capital</p>
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <span className="text-2xl">💰</span>
+                </div>
+              </div>
+              <p className="text-3xl md:text-4xl font-black text-blue-700">₱{totals.totalCapital.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
+              <p className="text-blue-500 text-xs mt-3 font-semibold">Starting Capital</p>
             </div>
-            <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-lg p-4 shadow-lg hover:shadow-xl transition">
-              <p className="text-gray-600 text-sm font-semibold">Total Income</p>
-              <p className="text-2xl md:text-3xl font-bold text-green-700">₱{totals.totalGrossIncome.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
+
+            <div className="bg-gradient-to-br from-green-50 via-green-50 to-green-100 border-2 border-green-200 rounded-xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-green-600 text-sm font-bold uppercase tracking-wide">Total Production</p>
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                  <span className="text-2xl">📈</span>
+                </div>
+              </div>
+              <p className="text-3xl md:text-4xl font-black text-green-700">₱{totals.totalProduction.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
+              <p className="text-green-500 text-xs mt-3 font-semibold">Gross Income</p>
             </div>
-            <div className="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-lg p-4 shadow-lg hover:shadow-xl transition">
-              <p className="text-gray-600 text-sm font-semibold">Total Expenses</p>
-              <p className="text-2xl md:text-3xl font-bold text-red-700">₱{(totals.totalFactoryExpenses + totals.totalPersonalExpenses + totals.totalLoans + totals.totalRejects).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
+
+            <div className="bg-gradient-to-br from-red-50 via-red-50 to-red-100 border-2 border-red-200 rounded-xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-red-600 text-sm font-bold uppercase tracking-wide">Total Expenses</p>
+                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                  <span className="text-2xl">💸</span>
+                </div>
+              </div>
+              <p className="text-3xl md:text-4xl font-black text-red-700">₱{(totals.totalFactoryExpenses + totals.totalPersonalExpenses + totals.totalLoans + totals.totalRejects).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
+              <p className="text-red-500 text-xs mt-3 font-semibold">All Deductions</p>
             </div>
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-lg p-4 shadow-lg hover:shadow-xl transition">
-              <p className="text-gray-600 text-sm font-semibold">Net Income</p>
-              <p className="text-2xl md:text-3xl font-bold text-purple-700">₱{totals.totalNetIncome.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
-            </div>
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-lg p-4 shadow-lg hover:shadow-xl transition">
-              <p className="text-gray-600 text-sm font-semibold">Capital Remaining</p>
-              <p className="text-2xl md:text-3xl font-bold text-orange-700">₱{totals.totalCapitalRemaining.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
+
+            <div className="bg-gradient-to-br from-orange-50 via-yellow-50 to-orange-100 border-2 border-orange-300 rounded-xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-orange-600 text-sm font-bold uppercase tracking-wide">Capital Remaining</p>
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-lg flex items-center justify-center">
+                  <span className="text-2xl">🎯</span>
+                </div>
+              </div>
+              <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">₱{totals.totalCapitalRemaining.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</p>
+              <p className="text-orange-500 text-xs mt-3 font-semibold">Actual Cash on Hand</p>
             </div>
           </div>
         )}
 
         {/* Charts Section */}
         {records.length > 0 && (
-          <div className="bg-white rounded-xl shadow-xl p-6 md:p-8 mb-8 border border-red-100">
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-800">📊 Analytics & Charts</h2>
-              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                <select value={viewMode} onChange={(e) => setViewMode(e.target.value as 'daily' | 'monthly')} className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 hover:border-red-300 transition">
-                  <option value="daily">📅 Daily Summary</option>
-                  <option value="monthly">📆 Monthly Summary</option>
+          <div className="bg-white rounded-xl shadow-2xl p-6 md:p-8 mb-8 border border-red-100">
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-3">
+                  <div className="p-3 bg-gradient-to-br from-red-100 to-red-50 rounded-lg">
+                    <TrendingUp className="text-red-600" size={28} />
+                  </div>
+                  Analytics & Insights
+                </h2>
+                <p className="text-gray-500 text-sm md:text-base mt-2">Visual representation of your financial data</p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                <select value={viewMode} onChange={(e) => setViewMode(e.target.value as 'daily' | 'monthly')} className="px-4 py-2 border-2 border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 hover:border-red-300 transition font-medium">
+                  <option value="daily">📅 Daily View</option>
+                  <option value="monthly">📆 Monthly View</option>
                 </select>
-                <select value={chartType} onChange={(e) => setChartType(e.target.value as 'line' | 'bar' | 'pie')} className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 hover:border-red-300 transition">
+                <select value={chartType} onChange={(e) => setChartType(e.target.value as 'line' | 'bar' | 'pie')} className="px-4 py-2 border-2 border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 hover:border-red-300 transition font-medium">
                   <option value="line">📈 Line Chart</option>
                   <option value="bar">📊 Bar Chart</option>
                   <option value="pie">🥧 Pie Chart</option>
@@ -504,39 +532,85 @@ export default function ExpenseTracker() {
               </div>
             </div>
 
-            <div className="w-full h-96 md:h-[500px]">
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-6 w-full h-96 md:h-[550px]">
               {chartType === 'line' && (
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={summaryData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip formatter={(value) => `₱${(value as number).toLocaleString('en-PH')}`} />
-                    <Legend />
-                    <Line type="monotone" dataKey="netIncome" stroke="#22c55e" strokeWidth={2} name="Net Income" />
-                    <Line type="monotone" dataKey="totalExpenses" stroke="#ef4444" strokeWidth={2} name="Total Expenses" />
-                    <Line type="monotone" dataKey="grossIncome" stroke="#0ea5e9" strokeWidth={2} name="Gross Income" />
+                  <LineChart data={summaryData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+                    <defs>
+                      <linearGradient id="colorProduction" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#22c55e" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
+                      </linearGradient>
+                      <linearGradient id="colorExpenses" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#ef4444" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                      </linearGradient>
+                      <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="date" stroke="#9ca3af" />
+                    <YAxis stroke="#9ca3af" />
+                    <Tooltip 
+                      formatter={(value) => `₱${(value as number).toLocaleString('en-PH')}`}
+                      contentStyle={{ backgroundColor: '#fff', border: '2px solid #dc2626', borderRadius: '8px' }}
+                    />
+                    <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                    <Line type="monotone" dataKey="production" stroke="#22c55e" strokeWidth={3} dot={{ fill: '#22c55e', r: 4 }} activeDot={{ r: 6 }} name="Production (Gross)" />
+                    <Line type="monotone" dataKey="totalExpenses" stroke="#ef4444" strokeWidth={3} dot={{ fill: '#ef4444', r: 4 }} activeDot={{ r: 6 }} name="Total Expenses" />
+                    <Line type="monotone" dataKey="netIncome" stroke="#3b82f6" strokeWidth={3} dot={{ fill: '#3b82f6', r: 4 }} activeDot={{ r: 6 }} name="Net Income" />
                   </LineChart>
                 </ResponsiveContainer>
               )}
               {chartType === 'bar' && (
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={summaryData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip formatter={(value) => `₱${(value as number).toLocaleString('en-PH')}`} />
-                    <Legend />
-                    <Bar dataKey="netIncome" fill="#22c55e" name="Net Income" />
-                    <Bar dataKey="totalExpenses" fill="#ef4444" name="Total Expenses" />
-                    <Bar dataKey="grossIncome" fill="#0ea5e9" name="Gross Income" />
+                  <BarChart data={summaryData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+                    <defs>
+                      <linearGradient id="barProduction" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#22c55e"/>
+                        <stop offset="100%" stopColor="#16a34a"/>
+                      </linearGradient>
+                      <linearGradient id="barExpenses" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#ef4444"/>
+                        <stop offset="100%" stopColor="#dc2626"/>
+                      </linearGradient>
+                      <linearGradient id="barIncome" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#3b82f6"/>
+                        <stop offset="100%" stopColor="#1d4ed8"/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="date" stroke="#9ca3af" />
+                    <YAxis stroke="#9ca3af" />
+                    <Tooltip 
+                      formatter={(value) => `₱${(value as number).toLocaleString('en-PH')}`}
+                      contentStyle={{ backgroundColor: '#fff', border: '2px solid #dc2626', borderRadius: '8px' }}
+                    />
+                    <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                    <Bar dataKey="production" fill="url(#barProduction)" name="Production (Gross)" radius={[8, 8, 0, 0]} />
+                    <Bar dataKey="totalExpenses" fill="url(#barExpenses)" name="Total Expenses" radius={[8, 8, 0, 0]} />
+                    <Bar dataKey="netIncome" fill="url(#barIncome)" name="Net Income" radius={[8, 8, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               )}
               {chartType === 'pie' && (
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={expenseBreakdown.filter(item => item.value > 0)} cx="50%" cy="50%" labelLine={false} label={({ name, value }) => `${name}: ₱${(value as number).toLocaleString('en-PH')}`} outerRadius={120} fill="#8884d8" dataKey="value">
+                    <Pie 
+                      data={expenseBreakdown.filter(item => item.value > 0)} 
+                      cx="50%" 
+                      cy="50%" 
+                      labelLine={true} 
+                      label={({ name, value }) => `${name}: ₱${(value as number).toLocaleString('en-PH')}`} 
+                      outerRadius={140}
+                      innerRadius={60}
+                      fill="#8884d8" 
+                      dataKey="value"
+                      animationBegin={0}
+                      animationDuration={800}
+                    >
                       {expenseBreakdown.map((_, index) => (<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />))}
                     </Pie>
                     <Tooltip formatter={(value) => `₱${(value as number).toLocaleString('en-PH')}`} />
@@ -568,12 +642,11 @@ export default function ExpenseTracker() {
                   <tr>
                     <th className="px-4 py-3 text-left font-semibold text-gray-700">Date</th>
                     <th className="px-4 py-3 text-right font-semibold text-gray-700">Capital</th>
+                    <th className="px-4 py-3 text-right font-semibold text-gray-700">Production</th>
                     <th className="px-4 py-3 text-right font-semibold text-gray-700">Factory Exp</th>
                     <th className="px-4 py-3 text-right font-semibold text-gray-700">Personal Exp</th>
                     <th className="px-4 py-3 text-right font-semibold text-gray-700">Loans</th>
                     <th className="px-4 py-3 text-right font-semibold text-gray-700">Rejects</th>
-                    <th className="px-4 py-3 text-right font-semibold text-gray-700">Production</th>
-                    <th className="px-4 py-3 text-right font-semibold text-gray-700">Gross Income</th>
                     <th className="px-4 py-3 text-right font-semibold text-green-600">Net Income</th>
                     <th className="px-4 py-3 text-right font-semibold text-orange-600">Capital Remaining</th>
                     <th className="px-4 py-3 text-center font-semibold text-gray-700">Actions</th>
@@ -582,14 +655,13 @@ export default function ExpenseTracker() {
                 <tbody>
                   {records.map((record, index) => (
                     <tr key={record.id} className={`${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-red-50 transition border-b border-gray-200`}>
-                      <td className="px-4 py-3 text-gray-800">{record.date}</td>
+                      <td className="px-4 py-3 text-gray-800 font-medium">{record.date}</td>
                       <td className="px-4 py-3 text-right text-gray-800">₱{record.capital.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
+                      <td className="px-4 py-3 text-right text-gray-800">₱{record.production.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
                       <td className="px-4 py-3 text-right text-gray-800">₱{record.factoryExpenses.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
                       <td className="px-4 py-3 text-right text-gray-800">₱{record.personalExpenses.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
                       <td className="px-4 py-3 text-right text-gray-800">₱{record.loans.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
                       <td className="px-4 py-3 text-right text-gray-800">₱{record.rejects.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
-                      <td className="px-4 py-3 text-right text-gray-800">{record.production.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
-                      <td className="px-4 py-3 text-right text-blue-600 font-semibold">₱{record.grossIncome.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
                       <td className="px-4 py-3 text-right text-green-600 font-bold">₱{record.netIncome.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
                       <td className="px-4 py-3 text-right text-orange-600 font-bold">₱{record.totalCapitalRemaining.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</td>
                       <td className="px-4 py-3 text-center">
@@ -621,11 +693,11 @@ export default function ExpenseTracker() {
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <p className="font-semibold text-red-900 mb-2">Net Income Formula:</p>
-              <code className="bg-white px-4 py-3 rounded border border-red-200 block text-sm font-mono text-gray-800 break-words">Gross Income - (Factory Expenses + Personal Expenses + Loans + Rejects)</code>
+              <code className="bg-white px-4 py-3 rounded border border-red-200 block text-sm font-mono text-gray-800 break-words">Production - (Factory Exp + Personal Exp + Loans + Rejects)</code>
             </div>
             <div>
-              <p className="font-semibold text-red-900 mb-2">Total Capital Remaining Formula:</p>
-              <code className="bg-white px-4 py-3 rounded border border-red-200 block text-sm font-mono text-gray-800 break-words">Capital - Net Income</code>
+              <p className="font-semibold text-red-900 mb-2">Capital Remaining Formula:</p>
+              <code className="bg-white px-4 py-3 rounded border border-red-200 block text-sm font-mono text-gray-800 break-words">Capital + Production - Expenses</code>
             </div>
           </div>
         </div>
@@ -646,28 +718,82 @@ export default function ExpenseTracker() {
       )}
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-red-700 via-red-600 to-red-800 text-white mt-12">
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-8">
-            <div>
-              <h3 className="text-2xl font-bold mb-2 text-yellow-300">BILL JOHN BUENAFLOR</h3>
-              <p className="text-lg font-semibold mb-4 text-red-100">OWNER / CEO</p>
+      <footer className="bg-gradient-to-r from-red-800 via-red-700 to-red-900 text-white mt-16 border-t-4 border-yellow-400">
+        <div className="max-w-7xl mx-auto px-4 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12">
+            {/* Brand Section */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-16 h-16 bg-white rounded-lg p-2 shadow-lg">
+                  <img src="/cal.jpg" alt="Logo" className="w-full h-full object-contain rounded" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-black text-yellow-300">MAGICALDERO</h3>
+                  <p className="text-red-100 text-sm">Professional Finance Tracking</p>
+                </div>
+              </div>
+              <p className="text-red-100 leading-relaxed">Empowering businesses with accurate, automated financial management and real-time insights.</p>
+            </div>
+
+            {/* Owner Info */}
+            <div className="space-y-4">
+              <h4 className="text-xl font-bold text-yellow-300 flex items-center gap-2">
+                <div className="w-1 h-6 bg-yellow-400 rounded-full"></div>
+                Owner & CEO
+              </h4>
               <div className="space-y-3 text-red-50">
-                <div className="flex items-start gap-3"><span className="text-yellow-300 font-bold mt-1">f</span><p>Bill John Ang Buenaflor</p></div>
-                <div className="flex items-start gap-3"><span className="text-yellow-300 font-bold">✉</span><p><a href="mailto:Magicaldero888@gmail.com" className="hover:text-yellow-300 transition">Magicaldero888@gmail.com</a></p></div>
-                <div className="flex items-start gap-3"><span className="text-yellow-300 font-bold">📍</span><p>Purok 5 brgy. Tawan-Tawan Mlang, North Cotabato</p></div>
-                <div className="flex items-start gap-3"><span className="text-yellow-300 font-bold">📱</span><p><a href="tel:09228922458" className="hover:text-yellow-300 transition">0922-892-2458</a> / <a href="tel:09209318456" className="hover:text-yellow-300 transition">0920-931-8456</a></p></div>
+                <div className="flex items-center gap-3 hover:text-yellow-300 transition">
+                  <span className="text-xl">👤</span>
+                  <div>
+                    <p className="font-semibold">Bill John Buenaflor</p>
+                    <p className="text-xs text-red-200">MAGICALDERO Founder</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 hover:text-yellow-300 transition">
+                  <span className="text-xl">📧</span>
+                  <a href="mailto:Magicaldero888@gmail.com" className="hover:underline">Magicaldero888@gmail.com</a>
+                </div>
               </div>
             </div>
-            <div className="flex justify-center md:justify-end">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-red-400/30">
-                <img src="/call.jpg" alt="Magicaldero Contact" className="max-w-xs h-auto rounded-lg" />
+
+            {/* Contact Info */}
+            <div className="space-y-4">
+              <h4 className="text-xl font-bold text-yellow-300 flex items-center gap-2">
+                <div className="w-1 h-6 bg-yellow-400 rounded-full"></div>
+                Contact Info
+              </h4>
+              <div className="space-y-3 text-red-50">
+                <div className="flex items-start gap-3 hover:text-yellow-300 transition">
+                  <span className="text-xl">📍</span>
+                  <p className="text-sm">Purok 5 brgy. Tawan-Tawan Mlang, North Cotabato, Philippines</p>
+                </div>
+                <div className="flex items-center gap-3 hover:text-yellow-300 transition">
+                  <span className="text-xl">📱</span>
+                  <div className="flex flex-col gap-1">
+                    <a href="tel:09228922458" className="hover:underline">0922-892-2458</a>
+                    <a href="tel:09209318456" className="hover:underline">0920-931-8456</a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div className="border-t border-red-500/30 pt-6 text-center">
-            <p className="text-red-100">© 2024 MAGICALDERO | Quality Products & Professional Service</p>
-            <p className="text-red-100 text-sm mt-2">Expense & Income Tracker - All calculations are automatic and accurate</p>
+
+          {/* Divider */}
+          <div className="border-t border-red-600/50 my-8"></div>
+
+          {/* Bottom Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            <div>
+              <p className="text-yellow-300 font-semibold mb-2">Quality • Trust • Excellence</p>
+              <p className="text-red-100 text-sm">© 2024 MAGICALDERO | Quality Products & Professional Service</p>
+              <p className="text-red-100/70 text-xs mt-1">Automated Expense & Income Tracking | Accurate Calculations</p>
+            </div>
+            <div className="flex justify-center md:justify-end">
+              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-red-400/20 hover:border-red-400/50 transition">
+                <p className="text-yellow-300 font-bold text-lg">⭐ Premium Service Provider</p>
+                <p className="text-red-100 text-xs mt-1">Trusted by Business Owners & Entrepreneurs</p>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
